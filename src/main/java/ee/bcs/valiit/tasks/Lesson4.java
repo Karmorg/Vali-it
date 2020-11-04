@@ -15,6 +15,9 @@ public class Lesson4 {
         } else {
             System.out.println("ei ole");
         }
+        BigDecimal kontoNr = new BigDecimal("101321321321321");
+        BigDecimal kontoBalanss = new BigDecimal("13213211321.00");
+
     }
 
 }
