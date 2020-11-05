@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Skynet {
     private boolean isNode = false;
-    private List<Integer> connectedNodes = new ArrayList<Integer>();
+//    private List<Integer> connectedNodes = new ArrayList<Integer>();
 
     public boolean isNode() {
         return isNode;
@@ -14,21 +14,21 @@ public class Skynet {
         isNode = node;
     }
 
-    public List<Integer> getConnectedNodes() {
-        return connectedNodes;
-    }
+//    public List<Integer> getConnectedNodes() {
+//        return connectedNodes;
+//    }
+//
+//    public void setConnectedNodes(List<Integer> connectedNodes) {
+//        this.connectedNodes = connectedNodes;
+//    }
 
-    public void setConnectedNodes(List<Integer> connectedNodes) {
-        this.connectedNodes = connectedNodes;
-    }
+//    public List<Integer> getConnectedGW() {
+//        return connectedGW;
+//    }
+//
+//    public void setConnectedGW(List<Integer> connectedGW) {
+//        this.connectedGW = connectedGW;
+//    }
 
-    public List<Integer> getConnectedGW() {
-        return connectedGW;
-    }
-
-    public void setConnectedGW(List<Integer> connectedGW) {
-        this.connectedGW = connectedGW;
-    }
-
-    private List<Integer> connectedGW = new ArrayList<Integer>();
+//    private List<Integer> connectedGW = new ArrayList<Integer>();
 }

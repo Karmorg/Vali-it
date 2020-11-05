@@ -30,7 +30,7 @@ public class Lesson2 {
     public static void exercise1() {
         // TODO loo 10 elemendile täisarvude massiv
         // TODO loe sisse konsoolist 10 täisarvu
-        // TODO trüki arvud välja vastupidises järiekorras
+        // TODO trüki arvud välja vastupidises järjekorras
         int intLeft = 0;
         int intarr[] = new int[10];
         for (int i = 0; i < intarr.length; i++) {
