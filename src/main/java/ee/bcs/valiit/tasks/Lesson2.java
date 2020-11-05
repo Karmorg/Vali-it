@@ -17,13 +17,14 @@ public class Lesson2 {
         //exercise7();
         //exercise1();
         //exercise2(3);
-        exercise3(5,6);
+        //exercise3(5,6);
         //fibonacci(5);
         //exercise5();
         //exercise6();
         //exercise7();
         //exercise8();
 //        exercise9();
+        test(8);
     }
 
 
@@ -280,6 +281,22 @@ public class Lesson2 {
 
         for (int k = 9; k < numSum.length; k++) {
             System.out.print(numSum[k]);
+        }
+        System.out.println();
+
+
+    }
+
+    private static void test(int a) {
+        int res = -2;
+        System.out.print(res + " ");
+        for (int i = 1; i < a; i++) {
+            if (i % 2 == 0) {
+                res = (Math.abs(res) + 2) * -1;
+            } else {
+                res = Math.abs(res) + 2;
+            }
+            System.out.print(res + " ");
         }
         System.out.println();
     }
