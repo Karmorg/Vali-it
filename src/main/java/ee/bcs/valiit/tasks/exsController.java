@@ -1,15 +1,13 @@
 package ee.bcs.valiit.tasks;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class exsController {
+    List<Node> nodeList = new ArrayList<>();
 
     //@GetMapping("test") - see teeb ühe lehe juurde rootile
 
@@ -37,7 +35,6 @@ public class exsController {
         return resultList;
     }
 
-
     @GetMapping("/client/{nimi}/muu/{nr}")  //läheb tööle URL: client/mingitekst?clientID=5
     //mingitekst= "suvalinejutt";
     //pathParam saab ka defineerimata jätta, kui lihtsalt kirjutada muutujad. Läheb vaikimisi sama nimega, nagu meetodis nimetatud
@@ -47,5 +44,57 @@ public class exsController {
                         @RequestParam("clientID") Long clientID,
                         @RequestParam(value = "testID", required = false) Integer optional) {
         return mingiTekst + " sisestati aadressiribale kaldkriipsu järgi" + clientID;
+    }
+
+    @GetMapping("dto_test")
+    public Node getNode() {
+        Node n = new Node(7, 3);
+        n.setGW(true);
+        return n;
+    }
+
+    @PostMapping("dto_test")
+    public Node get2Node(@RequestBody Node node) {
+        Node n = new Node(9, 1);
+        n.setGW(true);
+        return n;
+    }
+
+    @PostMapping("dto_test2")
+    public List<Node> get3Node(@RequestBody Node node) {
+        List<Node> nodeList = new ArrayList<>();
+        Node n = new Node(9, 1);
+        n.setGW(true);
+        nodeList.add(node);
+        nodeList.add(n);
+        return nodeList;
+    }
+
+    @GetMapping("nodes")
+    public List<Node> getNodes() {
+        return nodeList;
+    }
+
+    @GetMapping("node/{id}")
+    public Node getNodeByID(@PathVariable("id") int n) {
+        return nodeList.get(n);
+    }
+
+    @PutMapping("node/{id}")
+    public Node putNodeByID(@PathVariable("id") int n, @RequestBody Node node) {
+        nodeList.set(n, node);
+        return nodeList.get(n);
+    }
+
+    @PostMapping("node")
+    public List<Node> postNode(@RequestBody Node node) {
+        nodeList.add(node);
+        return nodeList;
+    }
+
+    @DeleteMapping("node/{id}")
+    public List<Node> removeNodeByID(@PathVariable("id") int n) {
+        nodeList.remove(n);
+        return nodeList;
     }
 }

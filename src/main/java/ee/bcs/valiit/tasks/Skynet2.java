@@ -40,13 +40,13 @@ public class Skynet2 {
                 Node node = new Node(N1, N2);
                 nodeList.add(node);
             } else {             //Kui oli nimekirjas, siis vaatab, kas N2 on ühendatud täppide nimekirjas
-                cNode1Index=0;
+                cNode1Index = 0;
                 for (int k = 0; k < nodeList.get(node1Index).getcNodes().size(); k++) {
-                    if (nodeList.get(node1Index).getcNodes().get(k) == N2){
-                        cNode1Index=k;
+                    if (nodeList.get(node1Index).getcNodes().get(k) == N2) {
+                        cNode1Index = k;
                     }
                 }
-                if (cNode1Index != 0){
+                if (cNode1Index != 0) {
                     nodeList.get(node1Index).getcNodes().add(N2);
                 }
             }
@@ -55,14 +55,14 @@ public class Skynet2 {
             if (node2Index != 0) {
                 Node node = new Node(N2, N1);
                 nodeList.add(node);
-            }else {            //Kui oli nimekirjas, siis vaatab, kas N2 on ühendatud täppide nimekirjas
-                cNode2Index=0;
+            } else {            //Kui oli nimekirjas, siis vaatab, kas N2 on ühendatud täppide nimekirjas
+                cNode2Index = 0;
                 for (int k = 0; k < nodeList.get(node2Index).getcNodes().size(); k++) {
-                    if (nodeList.get(node2Index).getcNodes().get(k) == N1){
-                        cNode2Index=k;
+                    if (nodeList.get(node2Index).getcNodes().get(k) == N1) {
+                        cNode2Index = k;
                     }
                 }
-                if (cNode2Index != 0){
+                if (cNode2Index != 0) {
                     nodeList.get(node2Index).getcNodes().add(N1);
                 }
             }
@@ -71,8 +71,15 @@ public class Skynet2 {
 
         for (int i = 0; i < E; i++) {
             int EI = in.nextInt(); // the index of a gateway node
+            for (Node n : nodeList) {
+                if (n.getNodeID() == in.nextInt()) {
+                    n.setGW(true);
+                }
+            }
         }
 
+        int delete1=0;
+        int delete2=0;
         // game loop
         while (true) {
             int SI = in.nextInt(); // The index of the node on which the Skynet agent is positioned this turn
@@ -80,6 +87,31 @@ public class Skynet2 {
             // Write an action using System.out.println()
             // To debug: System.err.println("Debug messages...");
 
+            for (Node n : nodeList) {
+                if (n.getNodeID() == in.nextInt()) {
+                    for (int cN : n.getcNodes()){
+                        for (Node n2 : nodeList){
+                            if (n2.isGW()){
+                                n.getcNodes().remove(cN);
+                                delete1 = cN;
+                                delete2 = n.getNodeID();
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (Node n : nodeList) {
+                if (n.getNodeID() == delete1) {
+                    for (int cN : n.getcNodes()){
+                        if (cN == delete2){
+                            n.getcNodes().remove(cN);
+                        }
+                    }
+                }
+            }
+
+            // ja nüüd veel vaja paarilises nodes ära kustutada link
 
             // Example: 0 1 are the indices of the nodes you wish to sever the link between
             System.out.println("0 1");

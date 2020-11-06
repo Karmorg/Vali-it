@@ -5,12 +5,16 @@ import java.util.List;
 
 public class Node {
     private int nodeID;
+    private boolean isGW;
+    private List<Integer> cNodes = new ArrayList<>();
 
     public int getNodeID() {
         return nodeID;
     }
 
-    private boolean isGW;
+    public void setNodeID(int nodeID) {
+        this.nodeID = nodeID;
+    }
 
     public boolean isGW() {
         return isGW;
@@ -24,11 +28,9 @@ public class Node {
         return cNodes;
     }
 
-    public void setcNodes(Integer aNode) {
-        this.cNodes.add(aNode);
+    public void setcNodes(List<Integer> cNodes) {
+        this.cNodes = cNodes;
     }
-
-    private List<Integer> cNodes = new ArrayList<>();
 
     public Node(int id, int aNode ) {
         this.cNodes.add(aNode);
