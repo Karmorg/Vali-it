@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.skynet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +114,7 @@ public class Skynet2 {
             // ja nüüd veel vaja paarilises nodes ära kustutada link
 
             // Example: 0 1 are the indices of the nodes you wish to sever the link between
-            System.out.println("0 1");
+            System.out.println(delete1 + " " + delete2);
         }
     }
 }

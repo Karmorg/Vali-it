@@ -1,5 +1,6 @@
 package ee.bcs.valiit.tasks;
 
+import ee.bcs.valiit.tasks.skynet.Node;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.skynet;
 
 import java.util.ArrayList;
 import java.util.List;
