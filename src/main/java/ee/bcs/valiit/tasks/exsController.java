@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 @RestController
 public class exsController {
@@ -35,6 +37,7 @@ public class exsController {
         }
         return resultList;
     }
+
 
     @GetMapping("/client/{nimi}/muu/{nr}")  //läheb tööle URL: client/mingitekst?clientID=5
     //mingitekst= "suvalinejutt";
