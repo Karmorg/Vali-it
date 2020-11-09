@@ -3,7 +3,9 @@ package ee.bcs.valiit.tasks.skynet;
 import java.util.ArrayList;
 import java.util.List;
 
+//public static class Node {
 public class Node {
+
     private int nodeID;
     private boolean isGW;
     private List<Integer> cNodes = new ArrayList<>();
