@@ -56,6 +56,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!--// Lisatud liquibase pärast-->
+		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+		</dependency>
 
 	</dependencies>
 

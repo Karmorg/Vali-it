@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet  author="Karmo"  id="changelog-1.0">
+
+        <createTable  tableName="client">
+            <column  name="id"  type="BigInt" autoIncrement="true">
+                <constraints  nullable="false"  primaryKey="true"  unique="true"/>
+            </column>
+            <column  name="l_name"  type="TEXT" >
+                <constraints  nullable="false"  primaryKey="false"  unique="false"/>
+            </column>
+            <column  name="f_name"  type="TEXT" >
+                <constraints  nullable="false"  primaryKey="false"  unique="false"/>
+            </column>
+            <column  name="personal_id"  type="TEXT" >
+                <constraints  nullable="true"  primaryKey="false"  unique="false"/>
+            </column>
+        </createTable>
+
+        <createTable  tableName="account">
+            <column  name="account_no"  type="BigInt" autoIncrement="true">
+                <constraints  nullable="false"  primaryKey="true"  unique="true"/>
+            </column>
+            <column  name="client_id"  type="BigInt" >
+                <constraints  nullable="false"  primaryKey="false"  unique="false"/>
+            </column>
+            <column  name="balance"  type="numeric" >
+                <constraints  nullable="false"  primaryKey="false"  unique="false"/>
+            </column>
+
+        </createTable>
+        <createTable  tableName="account_history">
+            <column  name="account_no"  type="BigInt" >
+                <constraints  nullable="false"  primaryKey="false"  unique="true"/>
+            </column>
+            <column  name="amount"  type="numeric" >
+                <constraints  nullable="false"  primaryKey="false"  unique="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog> 
