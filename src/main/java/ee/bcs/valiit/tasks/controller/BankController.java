@@ -3,6 +3,7 @@ package ee.bcs.valiit.tasks.controller;
 import ee.bcs.valiit.tasks.bank_controller.Account;
 import ee.bcs.valiit.tasks.bank_controller.History;
 import ee.bcs.valiit.tasks.bank_controller.Transaction;
+import ee.bcs.valiit.tasks.repository2.AccountRepository2;
 import ee.bcs.valiit.tasks.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -81,6 +82,30 @@ public class BankController {
 
         return accountService.transactionsHistory(accountNo);
     }
+
+    //Siin on Hibernate osa
+    @Autowired
+    private AccountRepository2 accountRepository2;
+
+    @GetMapping("hibernate_test")
+    public List<ee.bcs.valiit.tasks.repository2.Account> getAllAccounts(){
+        return accountRepository2.findAll();
+    }
+
+    @GetMapping("hibernate_test/{accountNo}")
+    public Object getOneAccount(@PathVariable ("accountNo") Long accountNo){
+        return accountRepository2.getOne(accountNo);
+    }
+
+    @PostMapping("hibernate_test_save_account/{clientNo}")
+    private void saveAccount (@PathVariable ("clientNo") Long clientNo){
+        ee.bcs.valiit.tasks.repository2.Account account = new ee.bcs.valiit.tasks.repository2.Account();
+        account.setClientId(clientNo);
+        account.setBalance(BigDecimal.ZERO);
+        accountRepository2.save(account);
+    }
+
+    //Siin lõppeb Hibernate osa
 
 }
 
