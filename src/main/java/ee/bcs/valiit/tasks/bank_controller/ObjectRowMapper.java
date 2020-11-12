@@ -9,7 +9,8 @@ import java.sql.SQLException;
 public class ObjectRowMapper implements RowMapper<Account> {
     @Override
     public Account mapRow(ResultSet resultSet, int i) throws SQLException{
-        Account account = new Account(resultSet.getString("account_no"),
+        Account account = new Account(resultSet.getInt("account_no"),
+                resultSet.getInt("client_id"),
                 resultSet.getBigDecimal("balance"));
         //account.setBalance(resultSet.getBigDecimal("balance"));
         return  account;

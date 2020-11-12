@@ -1,20 +1,15 @@
 package ee.bcs.valiit.tasks.service;
 
-import ee.bcs.valiit.tasks.bank_controller.Account;
-import ee.bcs.valiit.tasks.bank_controller.History;
-import ee.bcs.valiit.tasks.bank_controller.HistoryRowMapper;
-import ee.bcs.valiit.tasks.bank_controller.ObjectRowMapper;
+import ee.bcs.valiit.tasks.bank_controller.*;
 import ee.bcs.valiit.tasks.repository.AccountRpository;
 import ee.bcs.valiit.tasks.repository.ClientRepository;
 import ee.bcs.valiit.tasks.repository.HistoryRepository;
+import ee.bcs.valiit.tasks.repository.TransactionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AccountService {
@@ -25,38 +20,60 @@ public class AccountService {
     private ClientRepository clientRepository;
     @Autowired
     private HistoryRepository historyRepository;
+    @Autowired
+    private TransactionHistoryRepository transactionHistoryRepository;
 
     //vana
     public void createClient(String fName, String lName, String idCode) {
         clientRepository.createClient(fName, lName, idCode);
     }
     //uus
-    public int createNewClient(String fName, String lName) {
-        clientRepository.addClient(fName, lName);
-        return null;
+    public Integer createNewClient(String fName, String lName) {
+        return clientRepository.addClient(fName, lName);
     }
 
-    public void creatAccount(String accountNo, String idCode) {
-        accountRpository.creatAccount(accountNo, idCode);
+    public Integer createAccount(Integer client_id) {
+        return accountRpository.createAccount(client_id);
     }
 
     public List<Account> getAccountsList() {
         return accountRpository.getAccountsList();
     }
 
-    public void deposit(String aNo, BigDecimal amount) {
-        amount = amount.abs();
-        accountRpository.addToHistory(aNo, amount);
-        amount = amount.add(accountRpository.getAccountBalance(aNo));
-        accountRpository.updateBalance(aNo, amount);
+    public List<Account> getMyAccounts(Integer client_id) {
+        return accountRpository.getMyAccounts(client_id);
     }
 
-    public String withdraw(String aNo, BigDecimal amount) {
+    public BigDecimal getBalance(Integer accountNo) {
+        return accountRpository.getAccountBalance(accountNo);
+    }
+
+    public String deposit(Integer aNo, BigDecimal amount, String tType) {
+        amount = amount.abs();
+        //accountRpository.addToHistory(aNo, amount);
+        if (tType.equals("deposit")){
+            transactionHistoryRepository.addTransaction("deposit", aNo, amount);
+        }else {
+            transactionHistoryRepository.addTransaction("transfere", aNo, amount);
+        }
+
+        amount = amount.add(accountRpository.getAccountBalance(aNo));
+        accountRpository.updateBalance(aNo, amount);
+        return "Raha arvele kantud";
+    }
+
+    public String withdraw(Integer aNo, BigDecimal amount, String tType) {
         amount = amount.abs();
         if (accountRpository.getAccountBalance(aNo).compareTo(amount) > 0) {
             BigDecimal minus = new BigDecimal("-1");
             minus = amount.multiply(minus);
-            accountRpository.addToHistory(aNo, minus);
+            //accountRpository.addToHistory(aNo, minus);
+
+            if (tType.equals("withdraw")){
+                transactionHistoryRepository.addTransaction("withdraw", aNo, minus);
+            }else {
+                transactionHistoryRepository.addTransaction("transfere", aNo, minus);
+            }
 
             amount = accountRpository.getAccountBalance(aNo).subtract(amount);
             accountRpository.updateBalance(aNo, amount);
@@ -67,10 +84,10 @@ public class AccountService {
         }
     }
 
-    public String transfere(String aNo, String toNo, BigDecimal amount) {
+    public String transfere(Integer aNo, Integer toNo, BigDecimal amount) {
         amount = amount.abs();
-        if (withdraw(aNo,amount).equals("Raha võetud.")){
-            deposit(toNo, amount);
+        if (withdraw(aNo,amount, "transfere").equals("Raha võetud.")){
+            deposit(toNo, amount, "transfere");
             //withdraw(aNo, amount);
             return "Ülekanne sooritatud.";
         } else {
@@ -78,15 +95,11 @@ public class AccountService {
         }
     }
 
-    public BigDecimal getBalance(String accountNo) {
-        return accountRpository.getAccountBalance(accountNo);
-    }
-
-    public List<Account> getMyAccounts(String idCode) {
-        return accountRpository.getMyAccounts(idCode);
-    }
-
-    public List<History> getHistory( String accountNo) {
+    public List<History> getHistory( Integer accountNo) {
         return historyRepository.getHistory(accountNo);
+    }
+
+    public List<Transaction> transactionsHistory(Integer accountNo) {
+        return transactionHistoryRepository.getTransactionsHistory(accountNo);
     }
 }

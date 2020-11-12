@@ -43,4 +43,28 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="2" author="Karmo">
+        <dropUniqueConstraint tableName="account_history" constraintName="account_history_account_no_key" uniqueColumns="account_no"/>
+    </changeSet>
+    <changeSet id="3" author="Karmo">
+        <addForeignKeyConstraint baseTableName="account" baseColumnNames="client_id" constraintName="account_to_client"
+                                 referencedTableName="client"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="4" author="Karmo">
+        <createTable tableName="transaction_history">
+            <column  name="id"  type="BigInt" autoIncrement="true">
+                <constraints  nullable="false"  primaryKey="true"  unique="true"/>
+            </column>
+            <column name="account_no" type="BigInt">
+                <constraints  nullable="false"  primaryKey="false"  unique="false"
+                              foreignKeyName="fk_transaction_account" references="account(account_no)"/>
+            </column>
+            <column name="transaction_type" type="TEXT"/>
+            <column name="amount" type="numeric" />
+
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog> 

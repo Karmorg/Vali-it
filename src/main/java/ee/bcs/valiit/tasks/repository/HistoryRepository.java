@@ -17,9 +17,9 @@ public class HistoryRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public List<History> getHistory( String accountNo) {
+    public List<History> getHistory( Integer accountNo) {
 
-        String sql = "SELECT * FROM account_manager_schema.account_history WHERE account_no= :account_no";
+        String sql = "SELECT * FROM account_history WHERE account_no= :account_no";
         Map<String, Object> paramMap = new HashMap<>();
         paramMap.put("account_no", accountNo);
         List<History> historyList = jdbcTemplate.query(sql, paramMap, new HistoryRowMapper());

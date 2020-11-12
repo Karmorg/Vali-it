@@ -3,45 +3,30 @@ package ee.bcs.valiit.tasks.bank_controller;
 import java.math.BigDecimal;
 
 public class Account {
-    private String accountNo;
-    private String idCode;
+    private Integer accountNo;
+    private Integer clientId;
     private BigDecimal balance = new BigDecimal("0");
-//    private List<String> history =new ArrayList<>();
-//
-//    public List<String> getHistory() {
-//        return history;
-//    }
-//
-//    public void setHistory(List<String> history) {
-//        this.history = history;
-//    }
 
-
-    public Account(String accountNo, String idCode) {
+    public Account(Integer accountNo, Integer clientId, BigDecimal balance) {
         this.accountNo = accountNo;
-        this.idCode = idCode;
-        this.balance = BigDecimal.ZERO;
-    }
-
-    public Account(String accountNo, BigDecimal balance) {
-        this.accountNo = accountNo;
+        this.clientId = clientId;
         this.balance = balance;
     }
 
-    public String getAccountNo() {
+    public Integer getAccountNo() {
         return accountNo;
     }
 
-    public void setAccountNo(String accountNo) {
+    public void setAccountNo(Integer accountNo) {
         this.accountNo = accountNo;
     }
 
-    public String getIdCode() {
-        return idCode;
+    public Integer getClientId() {
+        return clientId;
     }
 
-    public void setIdCode(String idCode) {
-        this.idCode = idCode;
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
     }
 
     public BigDecimal getBalance() {

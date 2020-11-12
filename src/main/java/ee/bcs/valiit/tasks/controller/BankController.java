@@ -1,16 +1,14 @@
 package ee.bcs.valiit.tasks.controller;
 
-import ee.bcs.valiit.tasks.bank_controller.*;
+import ee.bcs.valiit.tasks.bank_controller.Account;
+import ee.bcs.valiit.tasks.bank_controller.History;
+import ee.bcs.valiit.tasks.bank_controller.Transaction;
 import ee.bcs.valiit.tasks.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class BankController {
@@ -18,24 +16,24 @@ public class BankController {
     @Autowired
     private AccountService accountService;
 
-    //vana
+    //vana (sisaldab isikukoodi)
     @PostMapping("clients/{fName}/{lName}/{idCode}")
     public void createClient(@PathVariable("fName") String fName,
                              @PathVariable("lName") String lName,
                              @PathVariable("idCode") String idCode) {
-        accountService.createClient(fName,lName,idCode);
-    }
-    //uus
-    @PostMapping("clients/{fName}/{lName}")
-    public Integer createNewClient(@PathVariable("fName") String fName,
-                             @PathVariable("lName") String lName) {
-        accountService.createNewClient(fName,lName);
+        accountService.createClient(fName, lName, idCode);
     }
 
-    @PostMapping("accounts/{accountNo}/{idCode}")
-    public void createAccount(@PathVariable("accountNo") String accountNo,
-                              @PathVariable("idCode") String idCode) {
-        accountService.creatAccount(accountNo,idCode);
+    //uus (testimise aja kulu pärast välja jäetud isikukoodi sisestamine)
+    @PostMapping("clients/{fName}/{lName}")
+    public Integer createNewClient(@PathVariable("fName") String fName,
+                                   @PathVariable("lName") String lName) {
+        return accountService.createNewClient(fName, lName);
+    }
+
+    @PostMapping("accounts/{id}")
+    public Integer createAccount(@PathVariable("id") Integer client_id) {
+        return accountService.createAccount(client_id);
     }
 
     @GetMapping("accounts")
@@ -43,40 +41,45 @@ public class BankController {
         return accountService.getAccountsList();
     }
 
-    @PutMapping("deposit/{accountNo}")
-    public void deposit(@PathVariable("accountNo") String aNo,
-                        @RequestBody BigDecimal amount) {
-    accountService.deposit(aNo, amount);
-    }
-
-    @PutMapping("withdraw/{accountNo}")
-    public String withdraw(@PathVariable("accountNo") String aNo,
-                           @RequestParam BigDecimal amount) {
-        return accountService.withdraw(aNo, amount);
-    }
-
-    @PutMapping("transfere/{accountNo}/{toAccount}")
-    public String transfere(@PathVariable("accountNo") String aNo,
-                            @PathVariable("toAccount") String toNo,
-                            @RequestBody BigDecimal amount) {
-        return accountService.transfere(aNo,toNo,amount);
+    @GetMapping("myAccounts/{client_id}")
+    public List<Account> getMyAccounts(@PathVariable("client_id") Integer client_id) {
+        return accountService.getMyAccounts(client_id);
     }
 
     @GetMapping("balance/{accountNo}")
-    public BigDecimal getBalance(@PathVariable("accountNo") String accountNo) {
+    public BigDecimal getBalance(@PathVariable("accountNo") Integer accountNo) {
         return accountService.getBalance(accountNo);
     }
 
-    @GetMapping("myAccounts/{idCode}")
-    public List<Account> getMyAccounts(@PathVariable("idCode") String idCode) {
-        return accountService.getMyAccounts(idCode);
+    @PutMapping("deposit/{accountNo}")
+    public String deposit(@PathVariable("accountNo") Integer aNo,
+                          @RequestBody BigDecimal amount) {
+        return accountService.deposit(aNo, amount, "deposit");
+    }
 
+    @PutMapping("withdraw/{accountNo}")
+    public String withdraw(@PathVariable("accountNo") Integer aNo,
+                           @RequestParam BigDecimal amount) {
+        return accountService.withdraw(aNo, amount, "withdraw");
+    }
+
+    @PutMapping("transfere/{accountNo}/{toAccount}")
+    public String transfere(@PathVariable("accountNo") Integer aNo,
+                            @PathVariable("toAccount") Integer toNo,
+                            @RequestBody BigDecimal amount) {
+        return accountService.transfere(aNo, toNo, amount);
     }
 
     @GetMapping("history/{accountNo}")
-    public List<History> getHistory(@PathVariable("accountNo") String accountNo) {
+    public List<History> getHistory(@PathVariable("accountNo") Integer accountNo) {
 
         return accountService.getHistory(accountNo);
+    }
+
+    @GetMapping("transactions/{accountNo}")
+    public List<Transaction> getTransactions(@PathVariable("accountNo") Integer accountNo) {
+
+        return accountService.transactionsHistory(accountNo);
     }
 
 }
