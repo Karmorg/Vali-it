@@ -1,11 +1,13 @@
 package ee.bcs.valiit.tasks.service;
 
 import ee.bcs.valiit.tasks.bank_controller.*;
+import ee.bcs.valiit.tasks.exeption.ApplicationException;
 import ee.bcs.valiit.tasks.repository.AccountRpository;
 import ee.bcs.valiit.tasks.repository.ClientRepository;
 import ee.bcs.valiit.tasks.repository.HistoryRepository;
 import ee.bcs.valiit.tasks.repository.TransactionHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -51,15 +53,19 @@ public class AccountService {
     public String deposit(Integer aNo, BigDecimal amount, String tType) {
         amount = amount.abs();
         //accountRpository.addToHistory(aNo, amount);
+        BigDecimal newBalance;
+
+        newBalance = amount.add(accountRpository.getAccountBalance(aNo));
+        accountRpository.updateBalance(aNo, newBalance);
+
         if (tType.equals("deposit")){
             transactionHistoryRepository.addTransaction("deposit", aNo, amount);
         }else {
             transactionHistoryRepository.addTransaction("transfere", aNo, amount);
         }
 
-        amount = amount.add(accountRpository.getAccountBalance(aNo));
-        accountRpository.updateBalance(aNo, amount);
         return "Raha arvele kantud";
+
     }
 
     public String withdraw(Integer aNo, BigDecimal amount, String tType) {
@@ -80,7 +86,7 @@ public class AccountService {
 
             return "Raha võetud.";
         } else {
-            return "Pole piisavalt vahendeid.";
+            throw new ApplicationException("Pole piisavalt vahendeid.");
         }
     }
 

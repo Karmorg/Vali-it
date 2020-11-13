@@ -1,5 +1,6 @@
 package ee.bcs.valiit.tasks;
 
+import ee.bcs.valiit.tasks.exeption.ExceptionTest;
 import ee.bcs.valiit.tasks.repository2.Account;
 import ee.bcs.valiit.tasks.repository2.AccountRepository2;
 import ee.bcs.valiit.tasks.skynet.Node;
@@ -16,6 +17,11 @@ public class exsController {
     List<Node> nodeList = new ArrayList<>();
 
     //@GetMapping("test") - see teeb ühe lehe juurde rootile
+
+    @GetMapping("exeption_test")
+    public int errorTest(Integer i){
+        return ExceptionTest.exceptionTest(i);
+    }
 
     @GetMapping(value = "/")
     public String getHelloWorld() {
