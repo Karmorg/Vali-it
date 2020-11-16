@@ -16,15 +16,15 @@ public class Lesson2 {
     public static void main(String[] args) {
         //exercise7();
         //exercise1();
-        //exercise2(3);
-        //exercise3(5,6);
+        exercise2(3);
+        //exercise3(10,10);
         //fibonacci(5);
         //exercise5();
         //exercise6();
         //exercise7();
         //exercise8();
 //        exercise9();
-        test(8);
+        //test(8);
     }
 
 
@@ -45,14 +45,17 @@ public class Lesson2 {
         }
     }
 
-    public static void exercise2(int x) {
+    public static int[] exercise2(int x) {
         // TODO prindi välja x esimest paaris arvu
         // Näide:
         // Sisend 5
         // Väljund 2 4 6 8 10
+        int[] ans = new int[x];
         for (int i = 1; i <= x; i++) {
             System.out.println(i * 2);
+            ans[i-1]=i*2;
         }
+        return ans;
 
     }
 
@@ -64,6 +67,7 @@ public class Lesson2 {
         // 2 4 6
         // 3 6 9
         int mTable[][] = new int[x][y];
+        System.out.println("test");
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++) {
                 mTable[i][j] = (i + 1) * (j + 1);

@@ -21,10 +21,14 @@ import java.util.Map;
 @Repository
 public class ClientRepository {
 
-    @Autowired
+    //See on teine soovitatud viis @Autowired asemel - kasutada konstruktorit
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public void createClient (String fName,String lName, String idCode){
+    public ClientRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public void createClient (String fName, String lName, String idCode){
         String sql = "INSERT INTO client (client_id, f_name, l_name) " +
                 "VALUES (:clientid, :fname, :lname)";
         Map<String, String> paramMap = new HashMap<>();
