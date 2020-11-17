@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vali IT pank</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<img src="logo.jpg"/>
+
+<h1 id="h1">Internetipank</h1>
+
+<h3 id="hakka_kliendiks"> Hakka kliendiks</h3>
+
+<p>Sisesta enda andmed tabelisse ja vajuta "Tulen üle" nupule.</p>
+
+<table name="newClientTable" border="1">
+    <tr>
+        <th>Eesnimi</th>
+        <th>Perekonnanimi</th>
+        <th>Isikukood</th>
+    </tr>
+    <tr>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="number"></td>
+    </tr>
+</table>
+
+<a href="https://github.com/siimrebane/vali-it">Tutvu tingimustega</a>
+
+<p><input type="button" value="Tulen üle"></p>
+
+<h3 id="loo_konto"> Loo konto</h3>
+<p>Uue konto loomiseks sisesta enda kliendi nr <input id="clientNo" type="number">
+    ja vajuta <input id="createAccountButton" type="button" value="sellele nupule."></p>
+
+<h3 id="kliendi_kontod"> Kliendi kontod</h3>
+<p>Vaata kliendi nr <input type="number" value="kliendi_nr"> <input type="button" value="kontosid."></p>
+
+<h3 id="konoto_seis"> Konto seis</h3>
+<p>Vaata konto nr <input type="number" value="konto_nr"> <input type="button" value="seisu."></p>
+
+<h3 id="ajalugu"> Tehingute ajalugu</h3>
+<p>Vaata konto nr <input type="number" value="konto_nr"> tehnigute ajalugu <input type="button" value="siit."></p>
+
+<a href="#h1"> Tagasi üles</a>
+
+<br><br>
+<h3> Java Scripti harjutused</h3>
+<button id="alert_test" onclick="alert('JavaScript läks tööle. See on alert.');">
+    Jooksuta JavaScripti
+</button>
+
+<br>
+<p><input id="insertedValue" type="number">
+    <input id="insertedValue2" type="number">
+    <button id="testButton">
+        Tee tabelit
+    </button>
+</p>
+<br>
+
+<table id="testTable" border="1">
+</table>
+
+<script>
+
+    let createAccount = document.getElementById("createAccountButton")
+    createAccount.onclick = function ()
+    {
+        let clientNo = document.getElementById("clientNo");
+        let newAccountNo;
+        alert('Sinu uue konto nr on: ' + newAccountNo);
+    }
+
+    // Harjutused
+    let test = document.getElementById("testButton");
+    test.onclick = function () {
+        let input = document.getElementById("insertedValue").value;
+        let input2 = document.getElementById("insertedValue2").value;
+        let testTable = document.getElementById("testTable")
+        for (let j = 1; j <= input2; j++) {
+            let rowElement = document.createElement("tr");
+            for (let i = 1; i <= input; i++) {
+                let cellElement = document.createElement("td");
+                cellElement.innerText = i * j;
+                rowElement.append(cellElement);
+            }
+            testTable.append(rowElement);
+        }
+    }
+</script>
+
+</body>
+</html>

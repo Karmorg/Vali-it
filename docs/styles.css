@@ -1,12 +1,17 @@
 body {
     background-color: antiquewhite;
+    alignment: center;
 }
 h1 {
     background-color: aquamarine;
+    alignment: center;
+    align-content: center;
 }
 h3 {
     color: darkcyan;
+    align-content: center;
 }
 p{
     color: cadetblue;
+    align-content: center;
 }
