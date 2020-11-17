@@ -23,7 +23,7 @@ public class exsController {
         return ExceptionTest.exceptionTest(i);
     }
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "/hello")
     public String getHelloWorld() {
         return "Hello World - Tere, tere, vana kere";
     }
