@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScripti harjutused</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<h3> Java Scripti harjutused</h3>
+
+<button id="alert_test" onclick="alert('JavaScript läks tööle. See on alert.');">
+    Jooksuta JavaScripti
+</button>
+<br>
+
+<p><input id="insertedValue" type="number">
+    <input id="insertedValue2" type="number">
+    <button id="testButton">
+        Loo korrutustabel
+    </button>
+</p>
+<br>
+
+<table id="testTable" border="1"></table>
+
+<button id="myButton">Fibonacci jada elemendid kuni</button>
+<input id="myInput" type="number"/>
+<!--<table id="myTableH" border="1"></table>-->
+<div id="content"></div>
+
+
+<script>
+
+    let test = document.getElementById("testButton");
+    test.onclick = function () {
+        let input = document.getElementById("insertedValue").value;
+        let input2 = document.getElementById("insertedValue2").value;
+        let testTable = document.getElementById("testTable")
+        for (let j = 1; j <= input2; j++) {
+            let rowElement = document.createElement("tr");
+            for (let i = 1; i <= input; i++) {
+                let cellElement = document.createElement("td");
+                cellElement.innerText = i * j;
+                rowElement.append(cellElement);
+            }
+            testTable.append(rowElement);
+        }
+    }
+
+    let runButton = document.getElementById("myButton");
+    runButton.onclick = function (){
+
+        let output = document.getElementById("content");
+        output.innerHTML = "";
+        let myInput = document.getElementById("myInput").value;
+        // let myTable = document.getElementById("myTableH");
+        let myTable = document.createElement("table");
+        myTable.setAttribute('border', '1');
+
+
+        if (myInput>0){
+            let cellElement = document.createElement("td");
+            cellElement.innerText = "0";
+            let rowElement = document.createElement("tr");
+            rowElement.append(cellElement);
+            myTable.append(rowElement);
+        }
+        if (myInput>1){
+            let cellElement2 = document.createElement("td");
+            cellElement2.innerText = "1";
+            let rowElement2 = document.createElement("tr");
+            rowElement2.append(cellElement2);
+            myTable.append(rowElement2);
+        }
+
+        let fib1 = 0;
+        let fib2 = 1;
+        let fib3 = 0;
+        for (let k=0; k<myInput-2;k++){
+            fib3= fib1+fib2;
+            fib1=fib2;
+            fib2= fib3;
+            let cellElement = document.createElement("td");
+            cellElement.innerText = fib3;
+            let rowElement = document.createElement("tr");
+            rowElement.append(cellElement);
+            myTable.append(rowElement);
+        }
+        output.append(myTable);
+
+    }
+
+</script>
+
+</body>
+</html>

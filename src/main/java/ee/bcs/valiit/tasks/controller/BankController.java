@@ -26,44 +26,52 @@ public class BankController {
     }
 
     //uus (testimise aja kulu pärast välja jäetud isikukoodi sisestamine)
+    @CrossOrigin
     @PostMapping("clients/{fName}/{lName}")
     public Integer createNewClient(@PathVariable("fName") String fName,
                                    @PathVariable("lName") String lName) {
         return accountService.createNewClient(fName, lName);
     }
 
+    @CrossOrigin
     @PostMapping("accounts/{id}")
     public Integer createAccount(@PathVariable("id") Integer client_id) {
         return accountService.createAccount(client_id);
     }
 
+    @CrossOrigin
     @GetMapping("accounts")
     public List<Account> getAccounts() {
         return accountService.getAccountsList();
     }
 
+    @CrossOrigin
     @GetMapping("myAccounts/{client_id}")
     public List<Account> getMyAccounts(@PathVariable("client_id") Integer client_id) {
         return accountService.getMyAccounts(client_id);
     }
 
+    @CrossOrigin
     @GetMapping("balance/{accountNo}")
     public BigDecimal getBalance(@PathVariable("accountNo") Integer accountNo) {
         return accountService.getBalance(accountNo);
     }
 
+    @CrossOrigin
     @PutMapping("deposit/{accountNo}")
     public String deposit(@PathVariable("accountNo") Integer aNo,
                           @RequestBody BigDecimal amount) {
         return accountService.deposit(aNo, amount, "deposit");
     }
 
+    @CrossOrigin
     @PutMapping("withdraw/{accountNo}")
     public String withdraw(@PathVariable("accountNo") Integer aNo,
                            @RequestParam BigDecimal amount) {
         return accountService.withdraw(aNo, amount, "withdraw");
     }
 
+    @CrossOrigin
     @PutMapping("transfere/{accountNo}/{toAccount}")
     public String transfere(@PathVariable("accountNo") Integer aNo,
                             @PathVariable("toAccount") Integer toNo,
@@ -77,6 +85,7 @@ public class BankController {
         return accountService.getHistory(accountNo);
     }
 
+    @CrossOrigin
     @GetMapping("transactions/{accountNo}")
     public List<Transaction> getTransactions(@PathVariable("accountNo") Integer accountNo) {
 

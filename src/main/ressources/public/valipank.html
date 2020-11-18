@@ -32,65 +32,183 @@
 
 <p><input type="button" value="Tulen üle"></p>
 
-<h3 id="loo_konto"> Loo konto</h3>
-<p>Uue konto loomiseks sisesta enda kliendi nr <input id="clientNo" type="number">
+<!--pooleli-->
+<h3 id="createAccountHeader"> Loo konto</h3>
+<p>Uue konto loomiseks sisesta enda kliendi nr <input id="clientNoForNewAccount" type="number">
     ja vajuta <input id="createAccountButton" type="button" value="sellele nupule."></p>
 
-<h3 id="kliendi_kontod"> Kliendi kontod</h3>
-<p>Vaata kliendi nr <input type="number" value="kliendi_nr"> <input type="button" value="kontosid."></p>
+<h3 id="clientAccountsHeader"> Kliendi kontod</h3>
+<p>Vaata klient nr <input id="clientNoForAccounts" type="number" > <input id="myAccountsButton" type="button" value="kontosid."></p>
+<div id="myAccountsContent">
+</div>
+<br>
 
 <h3 id="konoto_seis"> Konto seis</h3>
-<p>Vaata konto nr <input type="number" value="konto_nr"> <input type="button" value="seisu."></p>
+<p>Vaata konto nr <input id="clientNoForBalance" type="number" > <input id="balanceButton" type="button" value="seisu."></p>
+<div id="myBalanceContent">
+</div>
+<br>
 
-<h3 id="ajalugu"> Tehingute ajalugu</h3>
-<p>Vaata konto nr <input type="number" value="konto_nr"> tehnigute ajalugu <input type="button" value="siit."></p>
+<h3 id="historyHeading"> Tehingute ajalugu</h3>
+<p>Vaata konto nr <input id="clientNoForHistory" type="number" > tehingute ajalugu <input id="historyButton" type="button" value="siit."></p>
+<div id="historyContent">
+</div>
+<br>
+
+<h3 id="allAccountsHeader"> Kõik kontod</h3>
+<p>Kõigi kontode nimekirja saab <input id="accounts" type="button" value="siit."></p>
+<div id="accountsContent">
+</div>
+<br>
+
+<h3> Ülekanded</h3>
+<p> Sisesta konto nr ja vajuta soovitud tehingu nimega nupule.</p>
+<p><input id="transactionAccountNo" type="number"></p>
+<p><input id="depsitButton" type="button" value="Kanna arvele">  <input id="withdrawButton" type="button" value="Võta välja"></p>
+<p>Kanna arvelt nr <input id="accountNoTransfereFrom" type="number"> arvele <input id="accountNoTransfereTo" type="number">
+summa <input id="amount" type="number"> </p>
+<p> <input id="transfereButton" type="button" value="Soorita ülekanne"></p>
 
 <a href="#h1"> Tagasi üles</a>
 
 <br><br>
-<h3> Java Scripti harjutused</h3>
-<button id="alert_test" onclick="alert('JavaScript läks tööle. See on alert.');">
-    Jooksuta JavaScripti
-</button>
 
-<br>
-<p><input id="insertedValue" type="number">
-    <input id="insertedValue2" type="number">
-    <button id="testButton">
-        Tee tabelit
-    </button>
-</p>
-<br>
-
-<table id="testTable" border="1">
-</table>
 
 <script>
 
-    let createAccount = document.getElementById("createAccountButton")
-    createAccount.onclick = function ()
-    {
-        let clientNo = document.getElementById("clientNo");
-        let newAccountNo;
-        alert('Sinu uue konto nr on: ' + newAccountNo);
+    let createAccountButton = document.getElementById("createAccountButton");
+    createAccountButton.onclick = function (){
+        let clientNo =document.getElementById("clientNoForNewAccount");
+        fetch('http://localhost:8080/accounts/' + clientNo.value,
+            {
+                method: 'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(result =>result.json())
+            .then(function (account){
+                alert("Sinu uue konto nr on " + account);
+                }
+            )
     }
 
-    // Harjutused
-    let test = document.getElementById("testButton");
-    test.onclick = function () {
-        let input = document.getElementById("insertedValue").value;
-        let input2 = document.getElementById("insertedValue2").value;
-        let testTable = document.getElementById("testTable")
-        for (let j = 1; j <= input2; j++) {
-            let rowElement = document.createElement("tr");
-            for (let i = 1; i <= input; i++) {
-                let cellElement = document.createElement("td");
-                cellElement.innerText = i * j;
-                rowElement.append(cellElement);
-            }
-            testTable.append(rowElement);
+    let accountsContent = document.getElementById("accountsContent");
+    let myAccountsContent = document.getElementById("myAccountsContent");
+    let accountsTable = document.createElement("table");
+
+    function accountsList (accounts){
+        accountsTable.innerHTML = "";
+        let newRow = document.createElement("tr");
+        let newCell = document.createElement("td");
+        newCell.innerText = "Account no";
+        newRow.append(newCell);
+        let newCell2 = document.createElement("td");
+        newCell2.innerText = "Client no";
+        newRow.append(newCell2);
+        let newCell3 = document.createElement("td");
+        newCell3.innerText = "Balance";
+        newRow.append(newCell3);
+        accountsTable.append(newRow);
+
+        for (let i=0; i< accounts.length; i++){
+            let newRow = document.createElement("tr");
+            let newCell = document.createElement("td");
+            newCell.innerText = accounts[i].accountNo;
+            newRow.append(newCell);
+            let newCell2 = document.createElement("td");
+            newCell2.innerText = accounts[i].clientId;
+            newRow.append(newCell2);
+            let newCell3 = document.createElement("td");
+            newCell3.innerText = accounts[i].balance;
+            newRow.append(newCell3);
+            accountsTable.append(newRow);
         }
     }
+
+    let accountsButton = document.getElementById("accounts");
+    accountsButton.onclick = function (){
+
+        accountsTable.setAttribute('border', '1');
+        fetch('http://localhost:8080/accounts')
+            .then(result => result.json())
+            .then(accountsList)
+            .then(accountsContent.append(accountsTable))
+    }
+    let myBalance = document.getElementById("balanceButton");
+    myBalance.onclick = function (){
+        let myBalanceContent = document.getElementById("myBalanceContent");
+        myBalanceContent.innerHTML = "";
+        let clientNo = document.getElementById("clientNoForBalance");
+        fetch('http://localhost:8080/balance/' + clientNo.value)
+            .then(result => result.json())
+            .then(
+                function (balance){
+                    myBalanceContent.append("Kontol nr: " + clientNo.value +
+                        " on vabasid vahendeid " +balance + " € väärtuses.");
+                }
+            )
+    }
+
+    let historyButton = document.getElementById("historyButton");
+    historyButton.onclick = function (){
+        let historyContent=document.getElementById("historyContent");
+        let historyTable = document.createElement("table");
+        historyTable.innerHTML = "";
+        historyTable.setAttribute("border", "1");
+        let clientNo = document.getElementById("clientNoForHistory");
+        fetch('http://localhost:8080/transactions/' + clientNo.value)
+            .then(result => result.json())
+            .then(
+                function (history){
+                    historyTable.innerHTML = "";
+                    let newRow = document.createElement("tr");
+                    let newCell = document.createElement("td");
+                    newCell.innerText = "Id";
+                    newRow.append(newCell);
+                    let newCell2 = document.createElement("td");
+                    newCell2.innerText = "Account no";
+                    newRow.append(newCell2);
+                    let newCell3 = document.createElement("td");
+                    newCell3.innerText = "Transaction type";
+                    newRow.append(newCell3);
+                    let newCell4 = document.createElement("td");
+                    newCell4.innerText = "Amount";
+                    newRow.append(newCell4);
+                    historyTable.append(newRow);
+
+                    for (let i= 0; i <history.length; i++){
+                        let newRow = document.createElement("tr");
+                        let newCell = document.createElement("td");
+                        newCell.innerText = history[i].transactionID;
+                        newRow.append(newCell);
+                        let newCell2 = document.createElement("td");
+                        newCell2.innerText = history[i].accountNo;
+                        newRow.append(newCell2);
+                        let newCell3 = document.createElement("td");
+                        newCell3.innerText = history[i].transactionType;
+                        newRow.append(newCell3);
+                        let newCell4 = document.createElement("td");
+                        newCell4.innerText = history[i].amount;
+                        newRow.append(newCell4);
+                        historyTable.append(newRow);
+                    }
+                    historyContent.append(historyTable);
+                }
+            )
+    }
+
+    let myAccountsButton = document.getElementById("myAccountsButton");
+    myAccountsButton.onclick = function (){
+        let clientNo = document.getElementById("clientNoForAccounts");
+        fetch('http://localhost:8080/myAccounts/' + clientNo.value)
+            .then(result => result.json())
+            .then(accountsList)
+            .then(myAccountsContent.append(accountsTable))
+    }
+
+
+
 </script>
 
 </body>
