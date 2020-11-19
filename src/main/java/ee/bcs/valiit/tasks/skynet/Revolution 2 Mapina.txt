@@ -1,0 +1,247 @@
+import java.util.*;
+import java.io.*;
+import java.math.*;
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+class Player {
+
+    public static void main(String args[]) {
+        Scanner in = new Scanner(System.in);
+        int N = in.nextInt(); // the total number of nodes in the level, including the gateways
+        int L = in.nextInt(); // the number of links
+        int E = in.nextInt(); // the number of exit gateways
+
+        Map<Integer, Node> nodeMap = new HashMap<>();
+
+        for (int i = 0; i < L; i++) {
+            int N1 = in.nextInt(); // N1 and N2 defines a link between these nodes
+            int N2 = in.nextInt();
+                                            //Lisab täpid kaardile, kui neid ei ole olemas
+            if (!nodeMap.containsKey(N1)){
+                Node node = new Node(N1, N2);
+                nodeMap.put(N1, node);
+            } else{
+                if (!nodeMap.get(N1).getcNodes().containsKey(N2)){
+                    nodeMap.get(N1).getcNodes().put(N2, N2);
+                }
+            }
+
+            if (!nodeMap.containsKey(N2)){
+                Node node = new Node(N2, N1);
+                nodeMap.put(N2, node);
+            }else{
+                if (!nodeMap.get(N2).getcNodes().containsKey(N1)){
+                    nodeMap.get(N2).getcNodes().put(N1, N1);
+                }
+            }
+        }
+        for (int i = 0; i < E; i++) {
+            int EI = in.nextInt(); // the index of a gateway node
+
+            nodeMap.get(EI).setGW(true);
+        }
+
+        //Kontrollib, kas kõik punktid said kaarti lisatud
+       // for (Integer n : nodeMap.keySet()){
+          //  System.err.println("Täpike " + n);
+          //  for (Integer cn : nodeMap.get(n).getcNodes().keySet()) {
+          //      System.err.println("Ja selle ühendatud täpp: " + cn);
+         //   }
+        //}
+
+        // game loop
+        while (true) {
+            int SI = in.nextInt(); // The index of the node on which the Skynet agent is positioned this turn
+            int delete1 = 0;
+            int delete2 = 1;
+            boolean hit = false;
+            int[] links;
+            // Write an action using System.out.println()
+            // To debug: System.err.println("Debug messages...");
+
+            //Kui agent on GW kõrval, siis hävita see lüli
+            for (Integer cn : nodeMap.get(SI).getcNodes().keySet()){    //käib läbi agendi kõrval olevad täpid
+                if (nodeMap.get(cn).isGW){
+                    delete1=SI;
+                    delete2=cn;
+                    hit = true;
+                    break;
+                }
+            }
+
+            //Otsib agendi ümber olevatest täppidest sellist, millelt saab mitmesse GW
+            if (!hit){
+                for (Integer cn : nodeMap.get(SI).getcNodes().keySet()){
+                    links = toManyGW(cn, nodeMap);
+                    if (links[2] == 1){
+                        delete1 = links[0];
+                        delete2 = links[1];
+                        hit = true;
+                    }
+                }
+            }
+
+            //Otsib lähima järjestikuse kustutamise teega täpi, kust saab mitmesse GW
+            if (!hit){
+                links = lookFar(SI,SI, nodeMap);
+                if (links[2] == 1){
+                    delete1 = links[0];
+                    delete2 = links[1];
+                    hit = true;
+                }
+            }
+
+            //Kustutab sideme lampi täpi juurest, millest saab mitmesse GW-sse
+            if (!hit){
+                for (Integer n : nodeMap.keySet()){
+                    links = toManyGW(n, nodeMap);
+                    if (links[2] == 1){
+                        delete1 = links[0];
+                        delete2 = links[1];
+                        hit = true;
+                    }
+                }
+            }
+
+            //Kustutab esimese sideme lampi GW juurest, millel on üle ühe lingi
+            if (!hit){
+                for (Integer n : nodeMap.keySet()){
+                    if (nodeMap.get(n).isGW && nodeMap.get(n).getcNodes().size()>1){
+                        delete1 = n;
+                        delete2 = (int) nodeMap.get(n).getcNodes().keySet().toArray()[0];
+                        hit = true;
+                        break;
+                    }
+                }
+            }
+
+            //Kustutab esimese sideme lampi GW juurest
+            if (!hit){
+                for (Integer n : nodeMap.keySet()){
+                    if (nodeMap.get(n).isGW() && nodeMap.get(n).getcNodes().size()>0) {
+                        delete1 = n;
+                        delete2 = (int) nodeMap.get(n).getcNodes().keySet().toArray()[0];
+                        hit = true;
+                        break;
+                    }
+                }
+            }
+
+
+            removeFromMap(delete1, delete2, nodeMap);
+            // Example: 3 4 are the indices of the nodes you wish to sever the link between
+            System.out.println(delete1 +" "+ delete2);
+        }
+    }
+
+    public static void removeFromMap (int n1, int n2, Map<Integer, Node> map){
+        map.get(n1).getcNodes().remove(n2);
+        map.get(n2).getcNodes().remove(n1);
+    }
+
+    public static int[] toManyGW (int n, Map<Integer, Node> map){
+        int cGWCounter = 0;
+        int[] links = new int[3];
+        for (Integer cn : map.get(n).getcNodes().keySet()){
+            if (map.get(cn).isGW){
+                cGWCounter ++;
+                System.err.println("counter täpp: " + cn);
+            }
+        }
+        if (cGWCounter>1){  //Kui pääseb mitemesse GW-se, siis kustutab esimese seose GW-ga
+            for (Integer cn : map.get(n).getcNodes().keySet()){
+                if (map.get(cn).isGW){
+                    links[0] = n;
+                    links[1] = cn;
+                    links[2] = 1;
+                break;
+                }
+            }
+        }
+        return links;
+    }
+    
+    public static int[] lookFar (int m, int l, Map<Integer, Node> map){
+        int[] links = new int[3];
+        Map<Integer, Integer> moreToSee = new HashMap<>();
+        for (Integer n : map.get(m).getcNodes().keySet()){
+            int cGWCounter = 0;
+            for (Integer cn: map.get(n).getcNodes().keySet()){
+                if (map.get(cn).isGW){
+                    cGWCounter ++;
+                }
+            }
+
+            if (cGWCounter == 2 && !map.get(n).isGW){ //vastus
+                System.err.println("päris lähedal: " + n);
+                for (Integer cn : map.get(n).getcNodes().keySet()){
+                    if (map.get(cn).isGW){
+                        //int[] links = new int[3];
+                        links[0] = n;
+                        links[1] = cn;
+                        links[2] = 1;
+                        System.err.println("ülipalav juba " + n + " ja " + links[2]);
+                        return links;
+                }
+            }
+
+            } else if (cGWCounter == 1 && map.get(n).getNodeID()!=l && !moreToSee.containsKey(n)){
+                moreToSee.put(n, m);
+            }else{
+                //int[] links = new int[3];
+                links[0] = m;
+                links[1] = m+1;
+                links[2] = 0;
+            }
+        }
+        if (moreToSee.size()>0){
+            for (Integer mts : moreToSee.keySet()) {
+                System.err.println("järgmine täpp: " + mts);
+                links = lookFar(mts, moreToSee.get(mts), map);
+                
+            }
+        }
+
+        System.err.println("tulemus " + links[0] + " ja " + links[2]);
+        return links;
+    }
+        
+    public static class Node {
+
+        private int nodeID;
+        private boolean isGW;
+        private Map<Integer, Integer> cNodes = new HashMap<>();
+
+        public int getNodeID() {
+            return nodeID;
+        }
+
+        public void setNodeID(int nodeID) {
+            this.nodeID = nodeID;
+        }
+
+        public boolean isGW() {
+            return isGW;
+        }
+
+        public void setGW(boolean GW) {
+            isGW = GW;
+        }
+
+        public Map<Integer, Integer> getcNodes() {
+            return cNodes;
+        }
+
+        public void setcNodes(Map<Integer, Integer> cNodes) {
+            this.cNodes = cNodes;
+        }
+
+        public Node(int id, int aNode ) {
+            this.cNodes.put(aNode, aNode);
+            this.nodeID = id;
+        }
+    }
+}
