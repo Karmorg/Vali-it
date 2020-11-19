@@ -110,4 +110,29 @@ public class exsController {
         nodeList.remove(n);
         return nodeList;
     }
+
+    //Vue
+
+//    @CrossOrigin
+//    @GetMapping("register")
+//    public String register (String email){
+//        System.out.println(email);
+//        return  "Ok";
+//    }
+//    @CrossOrigin
+//    @PostMapping("register")
+//    public String register (String email){
+//        System.out.println(email);
+//        return  "Ok";
+//    }
+
+    @CrossOrigin
+    @PostMapping("register")
+    public List<User> register (@RequestBody User user){
+        System.out.println(user);
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+        userList.add(new User("slkfj", "dfs", "asf"));
+        return  userList;
+    }
 }
