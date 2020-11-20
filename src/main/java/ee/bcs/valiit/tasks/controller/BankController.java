@@ -60,8 +60,8 @@ public class BankController {
     @CrossOrigin
     @PutMapping("deposit/{accountNo}")
     public String deposit(@PathVariable("accountNo") Integer aNo,
-                          @RequestBody BigDecimal amount) {
-        return accountService.deposit(aNo, amount, "deposit");
+                          @RequestBody AmountRequest amountRequest) {
+        return accountService.deposit(aNo, amountRequest.getAmount(), "deposit");
     }
 
     @CrossOrigin
@@ -75,8 +75,8 @@ public class BankController {
     @PutMapping("transfere/{accountNo}/{toAccount}")
     public String transfere(@PathVariable("accountNo") Integer aNo,
                             @PathVariable("toAccount") Integer toNo,
-                            @RequestBody BigDecimal amount) {
-        return accountService.transfere(aNo, toNo, amount);
+                            @RequestBody AmountRequest amountRequest) {
+        return accountService.transfere(aNo, toNo, amountRequest.getAmount());
     }
 
     @GetMapping("history/{accountNo}")

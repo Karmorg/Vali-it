@@ -1,12 +1,17 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.controller;
 
+import ee.bcs.valiit.tasks.Lesson2;
+import ee.bcs.valiit.tasks.User;
 import ee.bcs.valiit.tasks.exeption.ExceptionTest;
 import ee.bcs.valiit.tasks.repository2.Account;
 import ee.bcs.valiit.tasks.repository2.AccountRepository2;
 import ee.bcs.valiit.tasks.skynet.Node;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,8 +29,13 @@ public class exsController {
     }
 
     @GetMapping(value = "/hello")
-    public String getHelloWorld() {
-        return "Hello World - Tere, tere, vana kere";
+    public String getHelloWorld(Principal principal) {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+        System.out.println(userDetails);
+        return "Hello World - Tere, tere, vana kere nimega " + principal.getName();
     }
 
     @GetMapping(value = "Exercises")

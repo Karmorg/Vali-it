@@ -11,8 +11,8 @@
 
 <h1 id="h1">Internetipank</h1>
 
+<!--pooleli-->
 <h3 id="hakka_kliendiks"> Hakka kliendiks</h3>
-
 <p>Sisesta enda andmed tabelisse ja vajuta "Tulen üle" nupule.</p>
 
 <table name="newClientTable" border="1">
@@ -22,17 +22,15 @@
         <th>Isikukood</th>
     </tr>
     <tr>
-        <td><input type="text"></td>
-        <td><input type="text"></td>
-        <td><input type="number"></td>
+        <td><input id="fName" type="text"></td>
+        <td><input id="lName" type="text"></td>
+        <td><input id="iDCode" type="number"></td>
     </tr>
 </table>
 
 <a href="https://github.com/siimrebane/vali-it">Tutvu tingimustega</a>
+<p><input id="createClientButton" type="button" value="Tulen üle"></p>
 
-<p><input type="button" value="Tulen üle"></p>
-
-<!--pooleli-->
 <h3 id="createAccountHeader"> Loo konto</h3>
 <p>Uue konto loomiseks sisesta enda kliendi nr <input id="clientNoForNewAccount" type="number">
     ja vajuta <input id="createAccountButton" type="button" value="sellele nupule."></p>
@@ -63,11 +61,12 @@
 
 <h3> Ülekanded</h3>
 <p> Sisesta konto nr ja vajuta soovitud tehingu nimega nupule.</p>
-<p><input id="transactionAccountNo" type="number"></p>
-<p><input id="depsitButton" type="button" value="Kanna arvele">  <input id="withdrawButton" type="button" value="Võta välja"></p>
-<p>Kanna arvelt nr <input id="accountNoTransfereFrom" type="number"> arvele <input id="accountNoTransfereTo" type="number">
-summa <input id="amount" type="number"> </p>
-<p> <input id="transfereButton" type="button" value="Soorita ülekanne"></p>
+<p>Konto <input id="transactionAccountNo" type="number"></p>
+<p>Summa <input id="transactionAmount" type="number"></p>
+<p><input id="depositButton" type="button" value="Kanna arvele">  <input id="withdrawButton" type="button" value="Võta välja"></p>
+<p>Kanna arvelt nr <input id="accountNoTransferFrom" type="number"> arvele <input id="accountNoTransferTo" type="number">
+summa <input id="amountTransfer" type="number"> </p>
+<p> <input id="transferButton" type="button" value="Soorita ülekanne"></p>
 
 <a href="#h1"> Tagasi üles</a>
 
@@ -75,6 +74,47 @@ summa <input id="amount" type="number"> </p>
 
 
 <script>
+
+
+
+    let transferButton = document.getElementById("transferButton");
+    transferButton.onclick = function (){
+        let accountNoFrom = document.getElementById("accountNoTransferFrom");
+        let accountNoTo = document.getElementById("accountNoTransferTo");
+        let amount = document.getElementById("amountTransfer");
+        fetch('http://localhost:8080/transfere/' + accountNoFrom.value + '/' + accountNoTo.value,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({amount: amount.value})
+            })
+            .then(result =>result.text())
+            .then(function (transfer){
+                    alert(transfer);
+                }
+            )
+    }
+
+
+    let createClientButton = document.getElementById("createClientButton");
+    createClientButton.onclick = function (){
+        let fName = document.getElementById("fName");
+        let lName = document.getElementById("lName");
+        fetch('http://localhost:8080/clients/' + fName.value +"/" +lName.value,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(result =>result.json())
+            .then(function (client){
+                alert("Sinu kliendi nr on: " + client);
+                }
+            )
+    }
 
     let createAccountButton = document.getElementById("createAccountButton");
     createAccountButton.onclick = function (){
@@ -207,7 +247,43 @@ summa <input id="amount" type="number"> </p>
             .then(myAccountsContent.append(accountsTable))
     }
 
+    let depositButton = document.getElementById("depositButton");
+    depositButton.onclick = function (){
+        let accountNo = document.getElementById("transactionAccountNo");
+        let amount = document.getElementById("transactionAmount");
+        fetch('http://localhost:8080/deposit/' + accountNo.value,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify({amount: amount.value})
+            })
+            .then(result =>result.text())
+            .then(function (deposit){
+                    alert(deposit);
+                }
+            )
+    }
 
+
+    let withdrawButton = document.getElementById("withdrawButton");
+    withdrawButton.onclick = function (){
+        let accountNo = document.getElementById("transactionAccountNo");
+        let amount = document.getElementById("transactionAmount");
+        fetch('http://localhost:8080/withdraw/' + accountNo.value+'?amount=' + amount.value,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type':'application/json'
+                }
+            })
+            .then(result =>result.text())
+            .then(function (withdraw){
+                    alert(withdraw);
+                }
+            )
+    }
 
 </script>
 
