@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.exercises;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

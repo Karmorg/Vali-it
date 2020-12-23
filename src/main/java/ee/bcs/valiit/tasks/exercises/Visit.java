@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.exercises;
 
 public class Visit {
     private String date;

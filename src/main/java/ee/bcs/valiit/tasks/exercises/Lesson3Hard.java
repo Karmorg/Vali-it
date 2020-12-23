@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.exercises;
 
 import java.util.Random;
 import java.util.Scanner;

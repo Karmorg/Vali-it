@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.exercises;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.io.File;
-import java.io.FileReader;
 
 public class Lesson2 {
 

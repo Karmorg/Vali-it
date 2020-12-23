@@ -1,4 +1,4 @@
-package ee.bcs.valiit.tasks;
+package ee.bcs.valiit.tasks.exercises;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
